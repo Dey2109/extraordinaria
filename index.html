@@ -1,317 +1,387 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Origen y Carreras del Software | INFRAMEN</title>
-    <!-- Tailwind CSS para el diseño y estilo -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fuentes de Google: Inter para textos largos, Space Grotesk para títulos -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome para los íconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Configuración personalizada de Tailwind -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Space Grotesk', 'sans-serif'],
-                    },
-                    colors: {
-                        tech: {
-                            dark: '#0f172a',
-                            light: '#1e293b',
-                            accent: '#0ea5e9',
-                            glow: '#38bdf8'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Estilos personalizados para animaciones y scroll */
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-        }
-        .gradient-text {
-            background: linear-gradient(to right, #38bdf8, #818cf8);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.4);
-            border-color: #0ea5e9;
-        }
-    </style>
+<meta charset="UTF-8">
+<!-- viewport: sin esto el celular dibuja la página "pequeña" y no es responsive -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El origen y las carreras del software | INFRAMEN</title>
+<meta name="description" content="Historia del software, evolución de los lenguajes de programación y carreras profesionales. Proyecto de INFRAMEN.">
+
+<!-- Fuentes: si no cargan (sin internet) el navegador usa las de respaldo definidas en CSS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============ 1. VARIABLES ============
+   Todos los colores y tamaños viven aquí: si quieres cambiar el tema,
+   se cambia en un solo lugar y toda la página se actualiza. */
+:root{
+  --blueprint:#0e3a5b;   /* fondo azul "plano técnico" */
+  --grid:#1d5a85;        /* líneas de la cuadrícula */
+  --paper:#f2f6fa;       /* fondo de las secciones claras */
+  --ink:#0a1f33;         /* texto sobre fondo claro */
+  --signal:#ffd166;      /* único color de acento */
+  --muted:#4b647a;       /* texto secundario sobre fondo claro */
+  --head:'Bricolage Grotesque',system-ui,sans-serif;
+  --body:'Source Serif 4',Georgia,serif;
+  --mono:ui-monospace,Consolas,Menlo,monospace;
+}
+
+/* ============ 2. BASE ============ */
+*{box-sizing:border-box;margin:0}               /* medidas predecibles */
+html{scroll-behavior:smooth;scroll-padding-top:4.5rem} /* el menú fijo no tapa los títulos */
+body{font:1.1rem/1.65 var(--body);color:var(--ink);background:var(--paper)}
+h1,h2,h3{font-family:var(--head);line-height:1.1}
+p{max-width:65ch}                                /* líneas cortas = más fáciles de leer */
+a{color:inherit}
+:focus-visible{outline:3px solid var(--signal);outline-offset:3px} /* accesibilidad con teclado */
+.wrap{max-width:1100px;margin:auto;padding:0 1.25rem}
+section{padding:5rem 0}
+
+/* ============ 3. MENÚ + BARRA DE PROGRESO ============ */
+nav{position:fixed;inset:0 0 auto 0;z-index:10;background:var(--blueprint);color:#fff;border-bottom:1px solid var(--grid)}
+nav .wrap{display:flex;justify-content:space-between;align-items:center;height:3.5rem}
+nav b{font-family:var(--head)}
+nav ul{display:flex;gap:1.5rem;list-style:none;padding:0}
+nav a{text-decoration:none;font:500 .95rem var(--head);padding:.4rem 0;border-bottom:2px solid transparent}
+nav a.on{border-color:var(--signal)}             /* sección visible actualmente */
+#menuBtn{display:none;background:none;border:1px solid var(--grid);color:#fff;padding:.4rem .7rem;border-radius:4px;font:inherit}
+#bar{position:absolute;left:0;bottom:-1px;height:3px;width:0;background:var(--signal)}
+@media(max-width:720px){
+  #menuBtn{display:block}
+  nav ul{display:none;position:absolute;top:3.5rem;left:0;right:0;flex-direction:column;gap:0;background:var(--blueprint);padding:.5rem 1.25rem 1rem}
+  nav ul.open{display:flex}
+  nav li a{display:block;padding:.7rem 0}
+}
+
+/* ============ 4. HERO (cuadrícula de plano técnico hecha solo con CSS) ============ */
+#inicio{background:
+  linear-gradient(var(--grid) 1px,transparent 1px) 0 0/40px 40px,
+  linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/40px 40px,
+  var(--blueprint);
+  color:#fff;padding:8rem 0 5rem}
+#inicio .wrap{display:grid;gap:3rem;grid-template-columns:1.1fr 1fr;align-items:center}
+#inicio h1{font-size:clamp(2.4rem,6vw,4.4rem);font-weight:800}
+#inicio p{margin-top:1.2rem;color:#d4e3f0}
+.btn{display:inline-block;margin-top:1.8rem;background:var(--signal);color:var(--ink);font:700 1rem var(--head);padding:.85rem 1.6rem;border-radius:6px;text-decoration:none}
+@media(max-width:860px){#inicio .wrap{grid-template-columns:1fr}}
+
+/* Momento memorable: la misma tarea (5 + 3) escrita en 4 épocas */
+.demo{background:var(--ink);border:1px solid var(--grid);border-radius:10px;overflow:hidden}
+.tabs{display:flex;flex-wrap:wrap}
+.tabs button{flex:1;background:none;border:0;border-bottom:2px solid var(--grid);color:#9fb9d0;padding:.8rem .4rem;font:600 .9rem var(--head);cursor:pointer}
+.tabs button[aria-selected=true]{color:var(--signal);border-color:var(--signal)}
+.demo pre{font:.95rem/1.6 var(--mono);padding:1.25rem;min-height:9rem;white-space:pre-wrap;color:#e8f1f8}
+.demo small{display:block;padding:0 1.25rem 1.25rem;color:#9fb9d0;font:.9rem/1.5 var(--body)}
+
+/* ============ 5. ¿QUÉ ES? ============ */
+#que h2,#historia h2,#internet h2,#carreras h2,#quiz h2{font-size:clamp(1.9rem,4vw,3rem);margin-bottom:1.2rem}
+.lead{font-size:1.3rem}
+
+/* ============ 6. LÍNEA DE TIEMPO (aquí sí es una secuencia real: años) ============ */
+#historia{background:#fff}
+.tl{list-style:none;padding:0;margin-top:2rem;border-left:3px solid var(--blueprint)}
+.tl li{position:relative;padding:0 0 2rem 1.75rem}
+.tl li::before{content:"";position:absolute;left:-.62rem;top:.45rem;width:.95rem;height:.95rem;background:var(--signal);border:3px solid var(--blueprint);border-radius:50%}
+.tl b{font:800 1.5rem var(--head);color:var(--blueprint)}
+.tl h3{font-size:1.15rem;margin:.1rem 0 .3rem}
+.tl p{color:var(--muted)}
+
+/* ============ 7. LENGUAJES + INTERNET ============ */
+.cols{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:2rem}
+.col{border-top:4px solid var(--blueprint);padding-top:1rem}
+.col h3{font-size:1.3rem;margin-bottom:.4rem}
+.col p{color:var(--muted)}
+#internet{background:var(--blueprint);color:#fff}
+#internet p,#internet li{color:#d4e3f0}
+#internet ul{margin-top:1rem;padding-left:1.2rem}
+
+/* ============ 8. CARRERAS (filtro interactivo) ============ */
+.filters{display:flex;flex-wrap:wrap;gap:.6rem;margin:1.5rem 0}
+.filters button{border:2px solid var(--blueprint);background:none;color:var(--blueprint);font:700 .95rem var(--head);padding:.5rem 1.1rem;border-radius:99px;cursor:pointer}
+.filters button[aria-pressed=true]{background:var(--blueprint);color:#fff}
+.jobs{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.job{background:#fff;border:1px solid #cfdbe6;border-left:5px solid var(--blueprint);padding:1.1rem 1.2rem;border-radius:6px}
+.job.auge{border-left-color:var(--signal)}       /* el color del borde indica "en auge" */
+.job h3{font-size:1.1rem}
+.job p{font-size:.98rem;color:var(--muted);margin-top:.3rem}
+
+/* ============ 9. QUIZ ============ */
+#quiz{background:#fff}
+.q{margin:1.5rem 0}
+.q p{font-weight:600}
+.q button{display:block;width:100%;max-width:520px;text-align:left;margin-top:.5rem;padding:.7rem 1rem;font:inherit;background:var(--paper);border:2px solid #cfdbe6;border-radius:6px;cursor:pointer}
+.q button.ok{border-color:#1b8a4b;background:#e3f5ea}
+.q button.bad{border-color:#b3261e;background:#fbe7e5}
+#score{font:700 1.2rem var(--head);color:var(--blueprint)}
+
+/* ============ 10. FOOTER ============ */
+footer{background:var(--ink);color:#b8cbdc;padding:2.5rem 0;font-size:.95rem}
+footer a{color:var(--signal)}
+footer ul{padding-left:1.2rem;margin:.6rem 0 1.2rem}
+
+/* Respeta a quien desactiva animaciones en su sistema */
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
 </head>
-<body class="antialiased selection:bg-tech-accent selection:text-white">
+<body>
 
-    <!-- Navegación (Header) -->
-    <nav class="fixed w-full z-50 bg-tech-dark/90 backdrop-blur-md border-b border-tech-light">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0">
-                    <a href="#" class="font-heading font-bold text-xl tracking-wider text-white">
-                        <span class="text-tech-accent">INFRAMEN</span> | PROYECTO
-                    </a>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="#inicio" class="hover:text-tech-accent transition-colors px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
-                        <a href="#historia" class="hover:text-tech-accent transition-colors px-3 py-2 rounded-md text-sm font-medium">Historia</a>
-                        <a href="#lenguajes" class="hover:text-tech-accent transition-colors px-3 py-2 rounded-md text-sm font-medium">Lenguajes</a>
-                        <a href="#carreras" class="hover:text-tech-accent transition-colors px-3 py-2 rounded-md text-sm font-medium">Carreras</a>
-                    </div>
-                </div>
-                <!-- Menú móvil (oculto en escritorio) -->
-                <div class="-mr-2 flex md:hidden">
-                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-tech-light focus:outline-none" aria-controls="mobile-menu" aria-expanded="false" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
-                        <span class="sr-only">Abrir menú principal</span>
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- Menú Móvil Desplegable -->
-        <div class="md:hidden hidden bg-tech-dark border-b border-tech-light" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#inicio" class="block hover:bg-tech-light hover:text-white px-3 py-2 rounded-md text-base font-medium">Inicio</a>
-                <a href="#historia" class="block hover:bg-tech-light hover:text-white px-3 py-2 rounded-md text-base font-medium">Historia</a>
-                <a href="#lenguajes" class="block hover:bg-tech-light hover:text-white px-3 py-2 rounded-md text-base font-medium">Lenguajes</a>
-                <a href="#carreras" class="block hover:bg-tech-light hover:text-white px-3 py-2 rounded-md text-base font-medium">Carreras</a>
-            </div>
-        </div>
-    </nav>
+<!-- ============ MENÚ ============ -->
+<nav aria-label="Principal">
+  <div class="wrap">
+    <b>INFRAMEN · Software</b>
+    <button id="menuBtn" aria-expanded="false" aria-controls="links">Menú</button>
+    <ul id="links">
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#historia">Historia</a></li>
+      <li><a href="#internet">Internet</a></li>
+      <li><a href="#carreras">Carreras</a></li>
+      <li><a href="#quiz">Quiz</a></li>
+    </ul>
+  </div>
+  <div id="bar"></div>
+</nav>
 
-    <!-- Sección Hero (Inicio) -->
-    <section id="inicio" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1920&q=80" alt="Fondo tecnológico" class="w-full h-full object-cover opacity-20">
-            <div class="absolute inset-0 bg-gradient-to-t from-tech-dark via-tech-dark/80 to-transparent"></div>
-        </div>
-        
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <span class="text-tech-accent font-semibold tracking-widest uppercase text-sm mb-4 block">Proyecto de Recuperación Extraordinaria</span>
-            <h1 class="text-5xl md:text-7xl font-heading font-bold text-white mb-6 leading-tight">
-                El Origen y Carreras del <br class="hidden md:block"/>
-                <span class="gradient-text">Software</span>
-            </h1>
-            <p class="mt-4 text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed">
-                El código es el sistema nervioso del mundo moderno. Descubre cómo pasamos de tarjetas perforadas a ecosistemas virtuales y conoce las profesiones que están construyendo el futuro.
-            </p>
-            <div class="mt-10 flex justify-center gap-4">
-                <a href="#historia" class="bg-tech-accent hover:bg-sky-400 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(14,165,233,0.5)]">
-                    Iniciar Recorrido
-                </a>
-            </div>
-        </div>
-    </section>
+<main>
+<!-- ============ HERO ============ -->
+<section id="inicio">
+  <div class="wrap">
+    <div>
+      <h1>El software empezó con cables y hoy vive en la nube</h1>
+      <p>Un recorrido por la historia de los programas, la evolución de los lenguajes y las carreras que los construyen. A la derecha: la misma suma, escrita en cuatro épocas.</p>
+      <a class="btn" href="#historia">Ver la historia</a>
+    </div>
 
-    <!-- Introducción -->
-    <section class="py-16 bg-tech-light/30 border-y border-tech-light/50">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <i class="fas fa-quote-left text-4xl text-tech-accent/50 mb-6"></i>
-            <h2 class="text-3xl font-heading font-bold mb-6 text-white">¿Qué es el Software?</h2>
-            <p class="text-lg text-gray-300 leading-relaxed mb-6">
-                El software no es solo líneas de código en una pantalla; es el puente entre la imaginación humana y la capacidad de cálculo de las máquinas. Es la colección de instrucciones que permite a los dispositivos tecnológicos (desde tu celular hasta los satélites espaciales) realizar tareas complejas, automatizar procesos y conectar a las personas en todo el mundo.
-            </p>
-            <a href="https://es.wikipedia.org/wiki/Software" target="_blank" class="inline-flex items-center text-tech-accent hover:text-tech-glow transition-colors font-medium">
-                Saber más en Wikipedia <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-            </a>
-        </div>
-    </section>
+    <!-- Selector de épocas: cada botón cambia el código mostrado (ver JS) -->
+    <div class="demo">
+      <div class="tabs" role="tablist" aria-label="Épocas de programación"></div>
+      <pre id="code" aria-live="polite"></pre>
+      <small id="note"></small>
+    </div>
+  </div>
+</section>
 
-    <!-- Inicios Históricos -->
-    <section id="historia" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-5xl font-heading font-bold text-white mb-4">Los Inicios Históricos</h2>
-            <div class="w-24 h-1 bg-tech-accent mx-auto rounded-full"></div>
-        </div>
+<!-- ============ QUÉ ES ============ -->
+<section id="que">
+  <div class="wrap">
+    <h2>¿Qué es el software?</h2>
+    <p class="lead">Es el conjunto de instrucciones que le dice a una máquina qué hacer.</p>
+    <p style="margin-top:1rem">El hardware es lo que puedes tocar: la pantalla, el procesador, los cables. El software es lo que no: la app del banco, el sistema operativo, un videojuego. Sin software, una computadora es solo un objeto caro que no sabe hacer nada.</p>
+    <p style="margin-top:1rem"><a href="https://es.wikipedia.org/wiki/Software" target="_blank" rel="noopener">Definición completa en Wikipedia</a></p>
+  </div>
+</section>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div class="order-2 md:order-1">
-                <div class="space-y-8">
-                    <!-- Evento 1 -->
-                    <div class="flex items-start gap-4">
-                        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-tech-light border border-tech-accent flex items-center justify-center text-tech-glow">
-                            <i class="fas fa-brain text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white mb-2">Siglo XIX: Ada Lovelace</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed">Considerada la primera programadora de la historia. Comprendió que la 'Máquina Analítica' podía procesar símbolos y no solo números, creando el primer algoritmo teórico.</p>
-                        </div>
-                    </div>
-                    <!-- Evento 2 -->
-                    <div class="flex items-start gap-4">
-                        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-tech-light border border-tech-accent flex items-center justify-center text-tech-glow">
-                            <i class="fas fa-microchip text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white mb-2">1936: La Máquina de Turing</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed">Alan Turing sienta las bases teóricas de la computación moderna, demostrando que una máquina universal podría ejecutar cualquier algoritmo concebible.</p>
-                        </div>
-                    </div>
-                    <!-- Evento 3 -->
-                    <div class="flex items-start gap-4">
-                        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-tech-light border border-tech-accent flex items-center justify-center text-tech-glow">
-                            <i class="fas fa-server text-xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white mb-2">1945: Computadoras Electrónicas (ENIAC)</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed">Las primeras computadoras no tenían "software" como tal; eran programadas reconectando físicamente gruesos cables y manipulando miles de interruptores manuales.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="order-1 md:order-2">
-                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80" alt="Placa de circuitos y tecnología antigua" class="rounded-2xl shadow-2xl border border-tech-light object-cover w-full h-96">
-            </div>
-        </div>
-    </section>
+<!-- ============ HISTORIA ============ -->
+<section id="historia">
+  <div class="wrap">
+    <h2>Los inicios históricos</h2>
+    <ol class="tl" id="timeline"></ol> <!-- se rellena desde el arreglo EVENTOS en el JS -->
+  </div>
+</section>
 
-    <!-- Evolución de los Lenguajes & Internet -->
-    <section id="lenguajes" class="py-20 bg-tech-light/20 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-heading font-bold text-white mb-4">La Evolución del Código</h2>
-                <div class="w-24 h-1 bg-tech-accent mx-auto rounded-full"></div>
-            </div>
+<!-- ============ LENGUAJES ============ -->
+<section id="lenguajes">
+  <div class="wrap">
+    <h2 style="font-size:clamp(1.9rem,4vw,3rem)">La evolución del código</h2>
+    <div class="cols">
+      <div class="col"><h3>Bajo nivel</h3><p>En los años 50 se usaba lenguaje ensamblador: instrucciones casi idénticas a lo que entiende el procesador. Poderoso, pero muy difícil de leer.</p></div>
+      <div class="col"><h3>Alto nivel inicial</h3><p>Fortran (1957) y COBOL (1959) trajeron palabras parecidas al inglés. C (1972) permitió escribir sistemas operativos enteros sin usar ensamblador.</p></div>
+      <div class="col"><h3>Modernos</h3><p>Java y C++ popularizaron la programación orientada a objetos. JavaScript y Python hacen posible crear aplicaciones web y de datos rápidamente.</p></div>
+    </div>
+  </div>
+</section>
 
-            <!-- Lenguajes Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-                <!-- Tarjeta 1 -->
-                <div class="bg-tech-dark p-8 rounded-2xl border border-tech-light card-hover">
-                    <i class="fas fa-barcode text-4xl text-tech-accent mb-6"></i>
-                    <h3 class="text-2xl font-bold text-white mb-3">Bajo Nivel</h3>
-                    <p class="text-gray-400 mb-4">En los años 50, se programaba en 'Lenguaje Ensamblador', utilizando códigos muy cercanos al lenguaje de máquina (binario). Era extremadamente difícil de leer.</p>
-                </div>
-                <!-- Tarjeta 2 -->
-                <div class="bg-tech-dark p-8 rounded-2xl border border-tech-light card-hover">
-                    <i class="fas fa-code text-4xl text-indigo-400 mb-6"></i>
-                    <h3 class="text-2xl font-bold text-white mb-3">Alto Nivel Inicial</h3>
-                    <p class="text-gray-400 mb-4">Lenguajes como Fortran (1957) y COBOL (1959) introdujeron instrucciones en inglés. Luego, el lenguaje C (1972) revolucionó la creación de sistemas operativos.</p>
-                </div>
-                <!-- Tarjeta 3 -->
-                <div class="bg-tech-dark p-8 rounded-2xl border border-tech-light card-hover">
-                    <i class="fab fa-python text-4xl text-emerald-400 mb-6"></i>
-                    <h3 class="text-2xl font-bold text-white mb-3">Modernos (POO)</h3>
-                    <p class="text-gray-400 mb-4">Lenguajes orientados a objetos (Java, C++) y lenguajes web dinámicos (JavaScript, Python) permiten hoy el desarrollo rápido y escalable de aplicaciones.</p>
-                </div>
-            </div>
+<!-- ============ INTERNET ============ -->
+<section id="internet">
+  <div class="wrap">
+    <h2>El impacto de Internet</h2>
+    <p>En 1989 Tim Berners-Lee propuso la World Wide Web. Desde entonces el software dejó de vivir aislado en cada computadora: se actualiza solo, se comparte y se usa desde cualquier dispositivo.</p>
+    <ul>
+      <li><b>SaaS:</b> el software como servicio, que se usa desde el navegador (Google Docs, Canva).</li>
+      <li><b>Nube:</b> los datos y programas están en servidores, no en tu equipo.</li>
+      <li><b>Apps móviles:</b> desde 2007, con el smartphone, el software cabe en el bolsillo.</li>
+    </ul>
+  </div>
+</section>
 
-            <!-- Impacto de Internet -->
-            <div class="bg-gradient-to-r from-tech-dark to-tech-light border border-tech-light rounded-3xl p-8 md:p-12 shadow-2xl flex flex-col md:flex-row items-center gap-10">
-                <div class="w-full md:w-1/2">
-                    <h2 class="text-3xl md:text-4xl font-heading font-bold text-white mb-6">El Impacto del <span class="text-tech-accent">Internet</span></h2>
-                    <p class="text-gray-300 text-lg leading-relaxed mb-6">
-                        La invención de la World Wide Web (WWW) en 1989 cambió el paradigma del software. Los programas dejaron de vivir aislados en computadoras de escritorio. Hoy, gracias al <strong>Cloud Computing</strong> (computación en la nube) y la <strong>Revolución Móvil</strong>, el software funciona como un servicio interconectado globalmente.
-                    </p>
-                    <ul class="space-y-3 text-gray-400">
-                        <li><i class="fas fa-check-circle text-tech-accent mr-2"></i> Software as a Service (SaaS)</li>
-                        <li><i class="fas fa-check-circle text-tech-accent mr-2"></i> Bases de datos globales y sincronizadas</li>
-                        <li><i class="fas fa-check-circle text-tech-accent mr-2"></i> Aplicaciones móviles (Apps)</li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-1/2">
-                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80" alt="Conexión global internet" class="rounded-xl shadow-lg w-full h-64 object-cover">
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ============ CARRERAS ============ -->
+<section id="carreras">
+  <div class="wrap">
+    <h2>Carreras profesionales</h2>
+    <p>Hay perfiles para quien disfruta la lógica y para quien disfruta crear. Filtra por tipo; el borde amarillo marca las áreas en auge.</p>
+    <div class="filters" id="filters"></div>
+    <div class="jobs" id="jobs"></div>
+  </div>
+</section>
 
-    <!-- Carreras Relacionadas -->
-    <section id="carreras" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-5xl font-heading font-bold text-white mb-4">Carreras Profesionales</h2>
-            <div class="w-24 h-1 bg-tech-accent mx-auto rounded-full mb-6"></div>
-            <p class="text-gray-400 max-w-2xl mx-auto">La industria del software es el sector laboral con mayor crecimiento a nivel mundial. Existen áreas tanto para perfiles lógicos como creativos.</p>
-        </div>
+<!-- ============ QUIZ ============ -->
+<section id="quiz">
+  <div class="wrap">
+    <h2>Pon a prueba lo aprendido</h2>
+    <div id="questions"></div>
+    <p id="score" aria-live="polite"></p>
+  </div>
+</section>
+</main>
 
-        <h3 class="text-2xl font-bold text-white mb-8 border-l-4 border-tech-accent pl-4">Áreas Tradicionales</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            <!-- Carrera Tradicional 1 -->
-            <div class="bg-tech-light/30 border border-tech-light p-6 rounded-xl">
-                <h4 class="text-xl font-bold text-white mb-2">Ingeniería en Sistemas</h4>
-                <p class="text-gray-400 text-sm mb-4">Diseña, implementa y optimiza infraestructuras tecnológicas completas integrando hardware y software para empresas.</p>
-                <a href="https://es.wikipedia.org/wiki/Ingenier%C3%ADa_de_sistemas" target="_blank" class="text-sm text-tech-accent hover:underline">Ver más info</a>
-            </div>
-            <!-- Carrera Tradicional 2 -->
-            <div class="bg-tech-light/30 border border-tech-light p-6 rounded-xl">
-                <h4 class="text-xl font-bold text-white mb-2">Ciencias de la Computación</h4>
-                <p class="text-gray-400 text-sm mb-4">Enfoque científico y matemático orientado a comprender cómo procesan información los algoritmos y la creación de nuevos lenguajes.</p>
-            </div>
-            <!-- Carrera Tradicional 3 -->
-            <div class="bg-tech-light/30 border border-tech-light p-6 rounded-xl">
-                <h4 class="text-xl font-bold text-white mb-2">Desarrollo Web (Programador)</h4>
-                <p class="text-gray-400 text-sm mb-4">Especialistas en escribir el código de sitios y plataformas web (Dividido en Front-end visual y Back-end servidor).</p>
-            </div>
-        </div>
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <b>Instituto Nacional General Francisco Menéndez (INFRAMEN)</b><br>
+    Trabajo de recuperación extraordinaria, 2026. Proyecto con fines educativos.
+    <p style="margin-top:1rem"><b>Fuentes consultadas</b></p>
+    <ul>
+      <li><a href="https://es.wikipedia.org/wiki/Software" target="_blank" rel="noopener">Wikipedia: Software</a></li>
+      <li><a href="https://es.wikipedia.org/wiki/Ada_Lovelace" target="_blank" rel="noopener">Wikipedia: Ada Lovelace</a></li>
+      <li><a href="https://es.wikipedia.org/wiki/Ingenier%C3%ADa_de_sistemas" target="_blank" rel="noopener">Wikipedia: Ingeniería de sistemas</a></li>
+    </ul>
+    <a href="#inicio">Volver arriba</a>
+  </div>
+</footer>
 
-        <h3 class="text-2xl font-bold text-white mb-8 border-l-4 border-indigo-500 pl-4">Profesiones en Auge (El Futuro)</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Carrera Futuro 1 -->
-            <div class="bg-gradient-to-b from-tech-dark to-tech-light p-6 rounded-xl border border-tech-light card-hover text-center relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-10 text-5xl text-white"><i class="fas fa-robot"></i></div>
-                <div class="text-indigo-400 text-4xl mb-4"><i class="fas fa-brain"></i></div>
-                <h4 class="text-lg font-bold text-white mb-2">Inteligencia Artificial</h4>
-                <p class="text-gray-400 text-xs">Desarrollo de modelos matemáticos (Machine Learning) que permiten a los sistemas aprender y tomar decisiones.</p>
-            </div>
-            <!-- Carrera Futuro 2 -->
-            <div class="bg-gradient-to-b from-tech-dark to-tech-light p-6 rounded-xl border border-tech-light card-hover text-center relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-10 text-5xl text-white"><i class="fas fa-database"></i></div>
-                <div class="text-emerald-400 text-4xl mb-4"><i class="fas fa-chart-pie"></i></div>
-                <h4 class="text-lg font-bold text-white mb-2">Ciencia de Datos (Data Science)</h4>
-                <p class="text-gray-400 text-xs">Extracción, análisis e interpretación de Big Data para predecir comportamientos y optimizar negocios.</p>
-            </div>
-            <!-- Carrera Futuro 3 -->
-            <div class="bg-gradient-to-b from-tech-dark to-tech-light p-6 rounded-xl border border-tech-light card-hover text-center relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-10 text-5xl text-white"><i class="fas fa-lock"></i></div>
-                <div class="text-red-400 text-4xl mb-4"><i class="fas fa-shield-halved"></i></div>
-                <h4 class="text-lg font-bold text-white mb-2">Ciberseguridad</h4>
-                <p class="text-gray-400 text-xs">Especialistas dedicados a proteger redes, infraestructuras y datos contra ataques, utilizando técnicas de hacking ético.</p>
-            </div>
-            <!-- Carrera Futuro 4 -->
-            <div class="bg-gradient-to-b from-tech-dark to-tech-light p-6 rounded-xl border border-tech-light card-hover text-center relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-10 text-5xl text-white"><i class="fas fa-cloud"></i></div>
-                <div class="text-sky-400 text-4xl mb-4"><i class="fas fa-server"></i></div>
-                <h4 class="text-lg font-bold text-white mb-2">Cloud Computing & DevOps</h4>
-                <p class="text-gray-400 text-xs">Arquitectos que despliegan aplicaciones en la nube (AWS, Azure) automatizando la entrega de software continuo.</p>
-            </div>
-        </div>
-    </section>
+<script>
+/* ============ DATOS ============
+   Separar los datos del HTML hace que agregar un evento o una carrera
+   sea añadir una línea al arreglo, sin tocar el diseño. */
 
-    <!-- Footer -->
-    <footer class="bg-tech-dark border-t border-tech-light pt-12 pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-            <div class="mb-6 md:mb-0 text-center md:text-left">
-                <h2 class="text-2xl font-heading font-bold text-white">
-                    <span class="text-tech-accent">INFRAMEN</span>
-                </h2>
-                <p class="text-gray-400 text-sm mt-2">Instituto Nacional General Francisco Menéndez</p>
-                <p class="text-gray-500 text-xs mt-1">Trabajo de Recuperación Extraordinaria - 2026</p>
-            </div>
-            <div class="flex space-x-6">
-                <a href="https://classroom.google.com" target="_blank" class="text-gray-400 hover:text-white transition-colors" title="Google Classroom">
-                    <i class="fas fa-chalkboard-teacher text-2xl"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors" title="Subir al inicio">
-                    <i class="fas fa-arrow-up text-2xl"></i>
-                </a>
-            </div>
-        </div>
-        <div class="mt-8 border-t border-tech-light/50 pt-8 text-center text-gray-500 text-sm">
-            &copy; 2026 Diseño y Desarrollo para Fines Educativos. Todos los derechos reservados.
-        </div>
-    </footer>
+// Las 4 épocas de la demo del hero
+const EPOCAS = [
+  {t:"1945 · Cables", code:"Mover el cable A a la\nentrada 5.\nMover el cable B a la\nentrada 3.\nActivar el interruptor SUMA.",
+   note:"En el ENIAC, programar era reconectar cables físicos a mano."},
+  {t:"1950s · Ensamblador", code:"MOV AX, 5\nADD AX, 3",
+   note:"Una instrucción por operación del procesador."},
+  {t:"1972 · C", code:"int r = 5 + 3;",
+   note:"El compilador traduce esta línea a ensamblador por ti."},
+  {t:"Hoy · Python", code:"r = 5 + 3\nprint(r)",
+   note:"Más corto y legible: el lenguaje se encarga de los detalles."}
+];
 
+// Línea de tiempo (en orden cronológico)
+const EVENTOS = [
+  ["1843","Ada Lovelace","Publica el primer algoritmo pensado para una máquina, la Máquina Analítica de Babbage. Intuyó que podría manejar símbolos y no solo números."],
+  ["1936","Alan Turing","Describe la \"máquina de Turing\", el modelo teórico en que se basa toda computadora actual."],
+  ["1945","ENIAC","Una de las primeras computadoras electrónicas. No tenía software almacenado: se programaba con cables e interruptores."],
+  ["1952","Grace Hopper","Crea uno de los primeros compiladores, un programa que traduce instrucciones humanas a código de máquina."],
+  ["1957","Fortran","Primer lenguaje de alto nivel ampliamente usado, pensado para cálculos científicos."],
+  ["1972","Lenguaje C","Dennis Ritchie lo crea en Bell Labs; con él se reescribe Unix, ancestro de muchos sistemas actuales."],
+  ["1989","World Wide Web","Tim Berners-Lee propone la Web, que conecta documentos y programas por Internet."],
+  ["1991","Linux","Linus Torvalds publica un kernel libre que hoy mueve servidores, teléfonos Android y supercomputadoras."],
+  ["2007","El smartphone","Con el iPhone se populariza la tienda de aplicaciones y nace la era del software móvil."],
+  ["2022","IA generativa","Los modelos de lenguaje llegan al público general y cambian cómo se escribe y se usa el software."]
+];
+
+// Carreras: g = grupo ("trad" tradicional / "auge" en auge)
+const CARRERAS = [
+  {n:"Ingeniería en Sistemas",g:"trad",d:"Diseña e implementa infraestructuras tecnológicas completas para empresas."},
+  {n:"Ciencias de la Computación",g:"trad",d:"Enfoque matemático sobre algoritmos, datos y nuevos lenguajes."},
+  {n:"Desarrollo web",g:"trad",d:"Construye sitios y plataformas: front-end (lo visual) y back-end (el servidor)."},
+  {n:"Inteligencia artificial",g:"auge",d:"Crea modelos que aprenden de los datos para tomar decisiones."},
+  {n:"Ciencia de datos",g:"auge",d:"Analiza grandes volúmenes de datos para predecir y optimizar."},
+  {n:"Ciberseguridad",g:"auge",d:"Protege redes y datos; incluye el hacking ético."},
+  {n:"Cloud y DevOps",g:"auge",d:"Despliega y automatiza aplicaciones en la nube (AWS, Azure)."}
+];
+
+// Preguntas: a = índice de la respuesta correcta
+const PREGUNTAS = [
+  {q:"¿Quién publicó el primer algoritmo pensado para una máquina?",o:["Alan Turing","Ada Lovelace","Linus Torvalds"],a:1},
+  {q:"¿Cómo se programaba el ENIAC?",o:["Con cables e interruptores","Con Python","Con una tienda de apps"],a:0},
+  {q:"¿Qué hace un compilador?",o:["Dibuja interfaces","Traduce código humano a código de máquina","Conecta a Internet"],a:1}
+];
+
+/* ============ DEMO DEL HERO ============ */
+const tabs = document.querySelector(".tabs");
+const code = document.getElementById("code");
+const note = document.getElementById("note");
+
+function mostrarEpoca(i){
+  code.textContent = EPOCAS[i].code;   // textContent (no innerHTML): trata el texto como texto, es más seguro
+  note.textContent = EPOCAS[i].note;
+  tabs.querySelectorAll("button").forEach((b,j)=>b.setAttribute("aria-selected", j===i));
+}
+EPOCAS.forEach((e,i)=>{
+  const b = document.createElement("button");
+  b.role = "tab"; b.textContent = e.t;
+  b.onclick = ()=>mostrarEpoca(i);
+  tabs.appendChild(b);
+});
+mostrarEpoca(3);
+
+/* ============ LÍNEA DE TIEMPO ============ */
+document.getElementById("timeline").innerHTML = EVENTOS.map(([año,t,d]) =>
+  `<li><b>${año}</b><h3>${t}</h3><p>${d}</p></li>`).join("");
+
+/* ============ CARRERAS + FILTRO ============ */
+const jobs = document.getElementById("jobs");
+const filters = document.getElementById("filters");
+const FILTROS = [["todas","Todas"],["trad","Tradicionales"],["auge","En auge"]];
+
+function pintarCarreras(grupo){
+  // filter() deja solo las carreras del grupo elegido
+  const lista = grupo==="todas" ? CARRERAS : CARRERAS.filter(c=>c.g===grupo);
+  jobs.innerHTML = lista.map(c=>
+    `<article class="job ${c.g}"><h3>${c.n}</h3><p>${c.d}</p></article>`).join("");
+  filters.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.g===grupo));
+}
+FILTROS.forEach(([g,t])=>{
+  const b = document.createElement("button");
+  b.dataset.g = g; b.textContent = t;
+  b.onclick = ()=>pintarCarreras(g);
+  filters.appendChild(b);
+});
+pintarCarreras("todas");
+
+/* ============ QUIZ ============ */
+let aciertos = 0, respondidas = 0;
+const cont = document.getElementById("questions");
+PREGUNTAS.forEach(p=>{
+  const div = document.createElement("div");
+  div.className = "q";
+  div.innerHTML = `<p>${p.q}</p>`;
+  p.o.forEach((txt,i)=>{
+    const b = document.createElement("button");
+    b.textContent = txt;
+    b.onclick = ()=>{
+      if(div.dataset.done) return;           // solo se responde una vez por pregunta
+      div.dataset.done = 1; respondidas++;
+      const bien = i===p.a;
+      if(bien) aciertos++;
+      b.classList.add(bien ? "ok" : "bad");
+      if(!bien) div.querySelectorAll("button")[p.a].classList.add("ok"); // muestra la correcta
+      if(respondidas===PREGUNTAS.length)
+        document.getElementById("score").textContent = `Resultado: ${aciertos} de ${PREGUNTAS.length}`;
+    };
+    div.appendChild(b);
+  });
+  cont.appendChild(div);
+});
+
+/* ============ MENÚ MÓVIL ============ */
+const btn = document.getElementById("menuBtn");
+const links = document.getElementById("links");
+btn.onclick = ()=>{
+  const abierto = links.classList.toggle("open");
+  btn.setAttribute("aria-expanded", abierto);   // avisa a lectores de pantalla
+};
+links.onclick = ()=>links.classList.remove("open"); // cierra el menú al elegir un enlace
+
+/* ============ BARRA DE PROGRESO + SECCIÓN ACTIVA ============ */
+const bar = document.getElementById("bar");
+addEventListener("scroll", ()=>{
+  const max = document.documentElement.scrollHeight - innerHeight;
+  bar.style.width = (scrollY / max * 100) + "%";
+},{passive:true});
+
+// IntersectionObserver avisa cuando una sección entra en pantalla,
+// más eficiente que revisar posiciones en cada scroll.
+const enlaces = [...links.querySelectorAll("a")];
+const obs = new IntersectionObserver(entradas=>{
+  entradas.forEach(e=>{
+    if(e.isIntersecting)
+      enlaces.forEach(a=>a.classList.toggle("on", a.getAttribute("href")==="#"+e.target.id));
+  });
+},{rootMargin:"-40% 0px -55% 0px"});
+document.querySelectorAll("section[id]").forEach(s=>obs.observe(s));
+</script>
 </body>
 </html>
